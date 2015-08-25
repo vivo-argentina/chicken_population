@@ -210,7 +210,7 @@ class chicken_population_event_wizard(osv.osv_memory):
                 'inventory_id': inventory_id,
                 'product_qty': qty,
                 'location_id': 12,
-                'product_id': hsc_ids[0]p,
+                'product_id': hsc_ids[0],
                 'product_uom_id': 1,
                 'theoretical_qty': 0
             }
