@@ -181,6 +181,11 @@ class chicken_population_event_wizard(osv.osv_memory):
             @param context: A standard dictionary
             @return:
             """
+
+            product_product=self.pool.get('product.product')
+            hsc_ids=product_product.search(cr, uid, [('default_code', 'ilike','hsc')], context=None)
+            #product_hsc=lines_obj.browse(cr, uid, hsc_ids[0], context=None)
+
             if context is None:
                 context = {}
 
@@ -190,7 +195,7 @@ class chicken_population_event_wizard(osv.osv_memory):
             inventory_id = inventory_obj.create(cr, uid, {
                 'name': _('CH: x') ,
                 'filter': 'product',
-                'product_id': 41,
+                'product_id': hsc_ids[0],
                 'location_id': 12}, context=context)
 
             #product = data.product_id.with_context(location=1, lot_id= 1)
@@ -200,7 +205,7 @@ class chicken_population_event_wizard(osv.osv_memory):
                 'inventory_id': inventory_id,
                 'product_qty': qty,
                 'location_id': 12,
-                'product_id': 41,
+                'product_id': hsc_ids[0],
                 'product_uom_id': 1,
                 'theoretical_qty': 0
             }
@@ -241,6 +246,7 @@ class hegg_clasification(osv.osv):
 
     def hegg_do_clasification(self, cr, uid, ids, context=None):
         clasification=self.read(cr, uid, ids[0], ['clasification_items'])
+
 
         lines_obj=self.pool.get('hegg.clasification.lines')
         components_obj=self.pool.get('product.template.components')
