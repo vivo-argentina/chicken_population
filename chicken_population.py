@@ -122,7 +122,7 @@ class chicken_population_event_wizard(osv.osv_memory):
 
 
             hsc_ids=product_product.search(cr, uid, [('default_code', 'ilike','hsc')], context=None)
-            unclassified_hegg_product=product_template.browse(cr,uid,hsc_ids[0],context=None)
+            unclassified_hegg_product=product_product.browse(cr,uid,hsc_ids[0],context=None)
             unclassified_hegg=product_template.browse(cr,uid,unclassified_hegg_product['product_tmpl_id'],context=None)
 
             chicken_population_data={}
