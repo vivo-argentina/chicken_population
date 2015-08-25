@@ -37,7 +37,7 @@ AVAILABLE_EVENTS = [
         ('temperature','Temperatura'),   
 
     ]
-UNCLASSIFIED_HEGG_ID=40
+UNCLASSIFIED_HEGG_ID=41
 
 class chicken_population(osv.osv):
     _name = "chicken.population"
@@ -118,12 +118,7 @@ class chicken_population_event_wizard(osv.osv_memory):
             population=chicken_population.browse(cr,uid,event_data['population_id'][0],context=None)
   
             product_template=self.pool.get('product.template')
-            product_product=self.pool.get('product.product')
-
-
-            hsc_ids=product_product.search(cr, uid, [('default_code', 'ilike','hsc')], context=None)
-            unclassified_hegg_product=product_product.browse(cr,uid,hsc_ids[0],context=None)
-            unclassified_hegg=product_template.browse(cr,uid,unclassified_hegg_product['product_tmpl_id'],context=None)
+            unclassified_hegg=product_template.browse(cr,uid,UNCLASSIFIED_HEGG_ID,context=None)
 
             chicken_population_data={}
             events=[]
