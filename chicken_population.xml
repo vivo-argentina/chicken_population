@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <menuitem id="base.menu_production" name="Production"  sequence="20"/>
+
+        <menuitem id="base.menu_population" name="Production" parent="base.menu_production" sequence="9"/>
+        <record id="chicken_population_tree_view" model="ir.ui.view">
+            <field name="name">chicken.population.tree</field>
+            <field name="model">chicken.population</field>
+            <field name="arch" type="xml">
+                <tree string="population">
+                    <field name="name"/>
+                    <field name="startdate"/>
+                    <field name="enddate"/>
+                    <field name="active"/>
+                </tree>
+            </field>
+        </record>
+        <record id="chicken_population_form_view" model="ir.ui.view">
+            <field name="name">chicken.population.common.form</field>
+            <field name="model">chicken.population</field>
+            <field name="arch" type="xml">
+                <form string="population">
+                    <sheet>
+                        <field invisible="True" name="id"/>
+                        <div class="oe_right oe_button_box" name="buttons" style="width: 300px;"/>
+                        <div class="oe_left" style="width: 500px;">
+                            <div class="oe_title" style="width: 390px;">
+                                <label class="oe_edit_only" for="name" string="Population Name"/>
+                                <h1>
+                                    <field class="oe_inline" name="name"/>
+                                </h1>
+                            </div>
+                        </div>
+                        <notebook>
+                            <page string="Information">
+                                <group colspan="4">
+                                    <group>
+                                        <field name="startdate"/>
+                                        <field name="enddate"/>
+                                        <field name="start_population"/>
+                                        <field name="actual_population"/>
+                                    </group>
+                                    <group>
+                                        <field name="active"/>
+                                    </group>
+                                </group>
+                                <field name="description" placeholder="describe the population characteristics..."/>
+                            </page>
+                            <page string="Items">
+                                <field name="event_item">
+                                    <tree>
+                                        <field name="datetime"/>
+                                        <field name="name"/>
+                                        <field name="qty"/>
+                                        <field name="percent"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        <record id="chicken_population_kanban_view" model="ir.ui.view">
+            <field name="name">chicken.population.kanban</field>
+            <field name="model">chicken.population</field>
+            <field name="arch" type="xml">
+                <kanban>
+                    <field name="name"/>
+                    <field name="startdate"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_vignette oe_semantic_html_override">
+                                <a type="open">
+                                    <field name="name"/>
+                                </a>
+                                <div class="oe_kanban_details">
+                                    <h4>
+                                        <a type="open">[
+                                            <field name="startdate"/>
+                                            ]
+                                            
+                                            <field name="actual_population"/></a>
+                                    </h4>
+                                    <div name="tags"/>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+        <record id="chicken_population_action" model="ir.actions.act_window">
+            <field name="name">Chicken population</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">chicken.population</field>
+            <field name="view_mode">tree,kanban,form</field>
+            <field name="view_type">form</field>
+            <field name="view_id" ref="chicken_population_kanban_view"/>
+        </record>
+        <menuitem action="chicken_population_action" id="menu_chicken_population_action" parent="base.menu_population" sequence="1"/>
+        <record id="chicken_population_event_graph" model="ir.ui.view">
+            <field name="name">chicken.population.event.graph</field>
+            <field name="model">chicken.population.event</field>
+            <field name="arch" type="xml">
+                <graph string="Events" type="line">
+                    <field name="datetime" interval="day" type="row"/>
+                    <field name="qty"/>
+                    
+                </graph>
+            </field>
+        </record>
+        <record id="action_chicken_population_event_graph" model="ir.actions.act_window">
+            <field name="name">Events</field>
+            <field name="res_model">chicken.population.event</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">graph</field>
+            <field name="view_id" ref="chicken_population_event_graph"/>
+        </record>
+
+        <menuitem action="action_chicken_population_event_graph" id="menu_action_chicken_population_event_graph" parent="base.menu_population" sequence="3"/>
+
+        <record id="chicken_population_event_filter" model="ir.ui.view">
+            <field name="name">chicken.population.event.select</field>
+            <field name="model">chicken.population.event</field>
+            <field name="arch" type="xml">
+                <search string="Seach event">
+                    <field name="type" string="Type"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Type" icon="terp-stock_effects-object-colorize" domain="[]" context="{'group_by':'type'}"/>
+                    </group>
+                </search>
+            </field>
+</record>
+
+        <record id="chicken_population_event_wizard" model="ir.ui.view">
+            <field name="name">chicken population event wizard</field>
+            <field name="model">chicken.population.event.wizard</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="population_id" string="Población"/>
+                            <field name="location_id"/>
+                        </group>
+                        <group>
+                            <field name="datetime"/>
+                            <field name="new_egg"/>
+                            <field name="broken_egg"/>
+                            <field name="chicken_dead"/>
+                            <field name="description" placeholder="describe motivos de la muerte"/>
+
+                            <field name="temperature"/>
+                        </group>
+                        <footer>
+                            <button class="oe_highlight" name="do_set_event" string="Set Events" type="object"/>
+                            <button special="cancel" string="Cancel"/>
+                        </footer>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="action_chicken_population_event_wizard" model="ir.actions.act_window">
+            <field name="name">Chicken population event wizard</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">chicken.population.event.wizard</field>
+            <field name="view_id" ref="chicken_population_event_wizard"/>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+        <menuitem action="action_chicken_population_event_wizard" id="menu_action_chicken_population_event_wizard" parent="base.menu_population" sequence="2"/>
+        <record id="hegg_clasification_tree_view" model="ir.ui.view">
+            <field name="name">hegg.clasification.tree</field>
+            <field name="model">hegg.clasification</field>
+            <field name="arch" type="xml">
+                <tree string="Clasification">
+                    <field name="name"/>
+                    <field name="date"/>
+                    <field name="total_eggs"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+        <record id="hegg_clasification_form_view" model="ir.ui.view">
+            <field name="name">hegg.clasification.common.form</field>
+            <field name="model">hegg.clasification</field>
+            <field name="arch" type="xml">
+                <form string="Clasification">
+                    <header>
+                        <button class="oe_highlight" name="hegg_do_clasification" string="Process clasification" type="object"/>
+                        <field name="state" widget="statusbar" nolabel="1"/>
+                    </header>
+                    <sheet>
+                        <field invisible="True" name="id"/>
+                        <field invisible="True" name="name"/>
+                        <group colspan="4">
+                            <group>
+                                <field name="date"/>
+                                <field name="partner_id" options="{'no_create_edit': True}" widget="many2many_tags"/>
+                            </group>
+                            <group>
+                                <field name="active"/>
+                            </group>
+                        </group>
+                        <field name="clasification_items" widget="one2many">
+                            <tree editable="top">
+                                <field name="qty"/>
+                                <field domain="[('sale_ok','=',True)]" name="product"/>
+                            </tree>
+                        </field>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="hegg_clasifications_action" model="ir.actions.act_window">
+            <field name="name">Clasification and production</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hegg.clasification</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_type">form</field>
+            <field name="view_id" ref="hegg_clasification_form_view"/>
+        </record>
+        <menuitem action="hegg_clasifications_action" id="menu_hegg_clasifications_action" parent="base.menu_population" sequence="10"/>
+        <record id="hegg_clasification_lines_tree_view" model="ir.ui.view">
+            <field name="name">hegg.clasification.lines.tree</field>
+            <field name="model">hegg.clasification.lines</field>
+            <field name="arch" type="xml">
+                <tree string="Clasification">
+                    <field name="qty"/>
+                    <field name="product"/>
+                </tree>
+            </field>
+        </record>
+    </data>
+</openerp>

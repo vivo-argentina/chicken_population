@@ -1,0 +1,434 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* granpat_problaciones
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-08-25 14:58+0000\n"
+"PO-Revision-Date: 2015-08-25 12:02-0300\n"
+"Last-Translator: Filoquin <filoquin@gmail.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"X-Generator: Poedit 1.5.4\n"
+
+#. module: granpat_problaciones
+#: field:chicken.population,active:0 field:chicken.population.event,active:0
+#: field:hegg.clasification,active:0
+msgid "Active"
+msgstr "Activo"
+
+#. module: granpat_problaciones
+#: field:chicken.population.event.wizard,broken_egg:0
+msgid "Broken eggs"
+msgstr "Huevos rotos"
+
+#. module: granpat_problaciones
+#: code:addons/granpat_problaciones/chicken_population.py:191
+#, python-format
+msgid "CH: x"
+msgstr "CH: x"
+
+#. module: granpat_problaciones
+#: view:chicken.population.event.wizard:granpat_problaciones.chicken_population_event_wizard
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: granpat_problaciones
+#: field:chicken.population.event.wizard,chicken_dead:0
+msgid "Chicken dead"
+msgstr "Gallinas muertas"
+
+#. module: granpat_problaciones
+#: model:ir.actions.act_window,name:granpat_problaciones.chicken_population_action
+#: model:ir.ui.menu,name:granpat_problaciones.menu_chicken_population_action
+msgid "Chicken population"
+msgstr "Poblaciones"
+
+#. module: granpat_problaciones
+#: model:ir.actions.act_window,name:granpat_problaciones.action_chicken_population_event_wizard
+#: model:ir.ui.menu,name:granpat_problaciones.menu_action_chicken_population_event_wizard
+msgid "Chicken population event wizard"
+msgstr "Asistente del parte diario"
+
+#. module: granpat_problaciones
+#: view:hegg.clasification:granpat_problaciones.hegg_clasification_form_view
+#: view:hegg.clasification:granpat_problaciones.hegg_clasification_tree_view
+#: view:hegg.clasification.lines:granpat_problaciones.hegg_clasification_lines_tree_view
+msgid "Clasification"
+msgstr "Calificacion"
+
+#. module: granpat_problaciones
+#: model:ir.actions.act_window,name:granpat_problaciones.hegg_clasifications_action
+#: model:ir.ui.menu,name:granpat_problaciones.menu_hegg_clasifications_action
+msgid "Clasification and production"
+msgstr "Clasificacion y produccion "
+
+#. module: granpat_problaciones
+#: field:hegg.clasification,partner_id:0
+msgid "Clasificators"
+msgstr "Clasificador"
+
+#. module: granpat_problaciones
+#: field:product.template,components_id:0
+msgid "Comonents"
+msgstr "Comentarios"
+
+#. module: granpat_problaciones
+#: field:chicken.population,create_uid:0
+#: field:chicken.population.event,create_uid:0
+#: field:chicken.population.event.wizard,create_uid:0
+#: field:hegg.clasification,create_uid:0
+#: field:hegg.clasification.lines,create_uid:0
+#: field:product.template.components,create_uid:0
+msgid "Created by"
+msgstr "Creado Por"
+
+#. module: granpat_problaciones
+#: field:chicken.population,create_date:0
+#: field:chicken.population.event,create_date:0
+#: field:chicken.population.event.wizard,create_date:0
+#: field:hegg.clasification,create_date:0
+#: field:hegg.clasification.lines,create_date:0
+#: field:product.template.components,create_date:0
+msgid "Created on"
+msgstr "Creado en"
+
+#. module: granpat_problaciones
+#: help:chicken.population,message_last_post:0
+msgid "Date of the last message posted on the record."
+msgstr "Date of the last message posted on the record."
+
+#. module: granpat_problaciones
+#: field:chicken.population,description:0
+#: field:chicken.population.event,description:0
+#: field:chicken.population.event.wizard,description:0
+msgid "Description"
+msgstr "Descricion"
+
+#. module: granpat_problaciones
+#: selection:hegg.clasification,state:0
+msgid "Draft"
+msgstr "Draft"
+
+#. module: granpat_problaciones
+#: model:ir.model,name:granpat_problaciones.model_chicken_population
+#: model:ir.model,name:granpat_problaciones.model_chicken_population_event
+#: model:ir.model,name:granpat_problaciones.model_chicken_population_event_type
+msgid "Email Thread"
+msgstr "Hilo de mensajes"
+
+#. module: granpat_problaciones
+#: selection:chicken.population.event,type:0
+msgid "Enfermedad"
+msgstr "Enfermedad"
+
+#. module: granpat_problaciones
+#: field:chicken.population.event,type:0
+msgid "Event Type"
+msgstr "Tipo de evento"
+
+#. module: granpat_problaciones
+#: field:chicken.population,event_item:0
+#: view:chicken.population.event:granpat_problaciones.chicken_population_event_graph
+#: model:ir.actions.act_window,name:granpat_problaciones.action_chicken_population_event_graph
+#: model:ir.ui.menu,name:granpat_problaciones.menu_action_chicken_population_event_graph
+msgid "Events"
+msgstr "Eventos"
+
+#. module: granpat_problaciones
+#: field:chicken.population,message_follower_ids:0
+msgid "Followers"
+msgstr "Seguidores"
+
+#. module: granpat_problaciones
+#: view:chicken.population.event:granpat_problaciones.chicken_population_event_filter
+msgid "Group By"
+msgstr "Group By"
+
+#. module: granpat_problaciones
+#: help:chicken.population,message_summary:0
+msgid ""
+"Holds the Chatter summary (number of messages, ...). This summary is "
+"directly in html format in order to be inserted in kanban views."
+msgstr ""
+"Holds the Chatter summary (number of messages, ...). This summary is "
+"directly in html format in order to be inserted in kanban views."
+
+#. module: granpat_problaciones
+#: selection:chicken.population.event,type:0
+msgid "Huevos recogidos"
+msgstr "Huevos recogidos"
+
+#. module: granpat_problaciones
+#: selection:chicken.population.event,type:0
+msgid "Huevos rotos"
+msgstr "Huevos rotos"
+
+#. module: granpat_problaciones
+#: field:chicken.population,id:0 field:chicken.population.event,id:0
+#: field:chicken.population.event.wizard,id:0 field:hegg.clasification,id:0
+#: field:hegg.clasification.lines,id:0 field:product.template.components,id:0
+msgid "ID"
+msgstr "ID"
+
+#. module: granpat_problaciones
+#: help:chicken.population,message_unread:0
+msgid "If checked new messages require your attention."
+msgstr "Nuevos mensajes requieren su atencion"
+
+#. module: granpat_problaciones
+#: help:chicken.population,active:0 help:chicken.population.event,active:0
+#: help:hegg.clasification,active:0
+msgid "If the active field is set to False."
+msgstr "If the active field is set to False."
+
+#. module: granpat_problaciones
+#: view:chicken.population:granpat_problaciones.chicken_population_form_view
+msgid "Information"
+msgstr "Información"
+
+#. module: granpat_problaciones
+#: field:chicken.population,start_population:0
+msgid "Initial Population Quantity"
+msgstr "Población Inicial"
+
+#. module: granpat_problaciones
+#: field:chicken.population,message_is_follower:0
+msgid "Is a Follower"
+msgstr "Seguidores"
+
+#. module: granpat_problaciones
+#: view:chicken.population:granpat_problaciones.chicken_population_form_view
+msgid "Items"
+msgstr "Items"
+
+#. module: granpat_problaciones
+#: field:chicken.population,message_last_post:0
+msgid "Last Message Date"
+msgstr "Last Message Date"
+
+#. module: granpat_problaciones
+#: field:chicken.population,write_uid:0
+#: field:chicken.population.event,write_uid:0
+#: field:chicken.population.event.wizard,write_uid:0
+#: field:hegg.clasification,write_uid:0
+#: field:hegg.clasification.lines,write_uid:0
+#: field:product.template.components,write_uid:0
+msgid "Last Updated by"
+msgstr "Last Updated by"
+
+#. module: granpat_problaciones
+#: field:chicken.population,write_date:0
+#: field:chicken.population.event,write_date:0
+#: field:chicken.population.event.wizard,write_date:0
+#: field:hegg.clasification,write_date:0
+#: field:hegg.clasification.lines,write_date:0
+#: field:product.template.components,write_date:0
+msgid "Last Updated on"
+msgstr "Last Updated on"
+
+#. module: granpat_problaciones
+#: field:chicken.population.event.wizard,location_id:0
+msgid "Location"
+msgstr "Ubicación"
+
+#. module: granpat_problaciones
+#: field:chicken.population,message_ids:0
+msgid "Messages"
+msgstr "Mensajes"
+
+#. module: granpat_problaciones
+#: help:chicken.population,message_ids:0
+msgid "Messages and communication history"
+msgstr "Messages and communication history"
+
+#. module: granpat_problaciones
+#: selection:chicken.population.event,type:0
+msgid "Muerte"
+msgstr "Muerte"
+
+#. module: granpat_problaciones
+#: field:chicken.population,name:0 field:chicken.population.event,name:0
+#: field:hegg.clasification,name:0
+msgid "Name"
+msgstr "Nombre"
+
+#. module: granpat_problaciones
+#: field:chicken.population.event.wizard,new_egg:0
+msgid "New eggs"
+msgstr "Huevos Recogidos"
+
+#. module: granpat_problaciones
+#: selection:chicken.population.event,type:0
+msgid "Otros"
+msgstr "Otros"
+
+#. module: granpat_problaciones
+#: field:chicken.population.event,percent:0
+msgid "Percent"
+msgstr "Porcentaje"
+
+#. module: granpat_problaciones
+#: view:chicken.population.event.wizard:granpat_problaciones.chicken_population_event_wizard
+msgid "Población"
+msgstr "Población"
+
+#. module: granpat_problaciones
+#: field:chicken.population.event.wizard,population_id:0
+msgid "Population"
+msgstr "Población"
+
+#. module: granpat_problaciones
+#: view:chicken.population:granpat_problaciones.chicken_population_form_view
+msgid "Population Name"
+msgstr "Nombre de la linea"
+
+#. module: granpat_problaciones
+#: field:chicken.population,actual_population:0
+msgid "Population Quantity"
+msgstr "Cantidad en la linea"
+
+#. module: granpat_problaciones
+#: view:hegg.clasification:granpat_problaciones.hegg_clasification_form_view
+msgid "Process clasification"
+msgstr "Procesar Clasificacion"
+
+#. module: granpat_problaciones
+#: model:ir.model,name:granpat_problaciones.model_product_product
+msgid "Product"
+msgstr "Producto"
+
+#. module: granpat_problaciones
+#: model:ir.model,name:granpat_problaciones.model_product_template
+msgid "Product Template"
+msgstr "Plantilla de producto"
+
+#. module: granpat_problaciones
+#: field:hegg.clasification,clasification_items:0
+msgid "Products"
+msgstr "Productos"
+
+#. module: granpat_problaciones
+#: field:chicken.population.event,qty:0 field:hegg.clasification.lines,qty:0
+#: field:product.template.components,qty:0
+msgid "Quantity"
+msgstr "Cantidad"
+
+#. module: granpat_problaciones
+#: view:chicken.population.event:granpat_problaciones.chicken_population_event_filter
+msgid "Seach event"
+msgstr "Buscar eventos"
+
+#. module: granpat_problaciones
+#: view:chicken.population.event.wizard:granpat_problaciones.chicken_population_event_wizard
+msgid "Set Events"
+msgstr "Crear eventos"
+
+#. module: granpat_problaciones
+#: field:hegg.clasification,state:0
+msgid "State"
+msgstr "Estado"
+
+#. module: granpat_problaciones
+#: field:chicken.population,message_summary:0
+msgid "Summary"
+msgstr "Resumen"
+
+#. module: granpat_problaciones
+#: selection:chicken.population.event,type:0
+msgid "Temperatura"
+msgstr "Temperatura"
+
+#. module: granpat_problaciones
+#: field:chicken.population.event.wizard,temperature:0
+msgid "Temperature"
+msgstr "Temperatura"
+
+#. module: granpat_problaciones
+#: field:chicken.population.event,total_qty:0
+msgid "Total Quantity"
+msgstr "Cantidad Total"
+
+#. module: granpat_problaciones
+#: field:hegg.clasification,total_eggs:0
+msgid "Total clasified Heggs"
+msgstr "Total de huevos clasificados"
+
+#. module: granpat_problaciones
+#: view:chicken.population.event:granpat_problaciones.chicken_population_event_filter
+msgid "Type"
+msgstr "Tipo"
+
+#. module: granpat_problaciones
+#: field:product.template.components,uom_id:0
+msgid "Unit of Measure"
+msgstr "Unit of Measure"
+
+#. module: granpat_problaciones
+#: field:chicken.population,message_unread:0
+msgid "Unread Messages"
+msgstr "Unread Messages"
+
+#. module: granpat_problaciones
+#: code:addons/granpat_problaciones/chicken_population.py:301
+#, python-format
+msgid "cls: x"
+msgstr "cls: x"
+
+#. module: granpat_problaciones
+#: view:product.template:granpat_problaciones.gp_product_components_form
+msgid "components"
+msgstr "componentes"
+
+#. module: granpat_problaciones
+#: field:hegg.clasification,date:0
+msgid "date"
+msgstr "Fecha"
+
+#. module: granpat_problaciones
+#: view:chicken.population.event.wizard:granpat_problaciones.chicken_population_event_wizard
+msgid "describe motivos de la muerte"
+msgstr "describe motivos de la muerte"
+
+#. module: granpat_problaciones
+#: view:chicken.population:granpat_problaciones.chicken_population_form_view
+msgid "describe the population characteristics..."
+msgstr "describe the population characteristics..."
+
+#. module: granpat_problaciones
+#: selection:hegg.clasification,state:0
+msgid "done"
+msgstr "Finalizado"
+
+#. module: granpat_problaciones
+#: field:chicken.population,enddate:0
+msgid "end date"
+msgstr "Fecha de finalización"
+
+#. module: granpat_problaciones
+#: field:chicken.population.event,datetime:0
+#: field:chicken.population.event.wizard,datetime:0
+msgid "event date"
+msgstr "Dia del evento"
+
+#. module: granpat_problaciones
+#: view:chicken.population:granpat_problaciones.chicken_population_form_view
+#: view:chicken.population:granpat_problaciones.chicken_population_tree_view
+msgid "population"
+msgstr "población"
+
+#. module: granpat_problaciones
+#: field:hegg.clasification.lines,product:0
+#: field:product.template.components,product:0
+msgid "product"
+msgstr "producto"
+
+#. module: granpat_problaciones
+#: field:chicken.population,startdate:0
+msgid "start date"
+msgstr "Fecha de inicio"

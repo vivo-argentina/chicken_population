@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="gp_product_components_form" model="ir.ui.view">
+            <field name="name">product.template.componets.form</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@string='Information']" position="after">
+                    <page string="components">
+                        <field name="components_id" widget="one2many">
+                            <tree editable="top">
+                                <field name="qty"/>
+                                <field name="product"/>
+                                <field name="uom_id"/>
+                            </tree>
+                        </field>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</openerp>
