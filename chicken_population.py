@@ -118,7 +118,12 @@ class chicken_population_event_wizard(osv.osv_memory):
             population=chicken_population.browse(cr,uid,event_data['population_id'][0],context=None)
   
             product_template=self.pool.get('product.template')
-            unclassified_hegg=product_template.browse(cr,uid,UNCLASSIFIED_HEGG_ID,context=None)
+            product_product=self.pool.get('product.product')
+
+
+            hsc_ids=product_product.search(cr, uid, [('default_code', 'ilike','hsc')], context=None)
+            unclassified_hegg_product=product_template.browse(cr,uid,hsc_ids[0],context=None)
+            unclassified_hegg=product_template.browse(cr,uid,unclassified_hegg_product['product_tmpl_id'],context=None)
 
             chicken_population_data={}
             events=[]
@@ -205,7 +210,7 @@ class chicken_population_event_wizard(osv.osv_memory):
                 'inventory_id': inventory_id,
                 'product_qty': qty,
                 'location_id': 12,
-                'product_id': hsc_ids[0],
+                'product_id': hsc_ids[0]p,
                 'product_uom_id': 1,
                 'theoretical_qty': 0
             }
