@@ -153,7 +153,7 @@
                             <field name="new_egg"/>
                             <field name="broken_egg"/>
                             <field name="chicken_dead"/>
-                            <field name="description" placeholder="describe motivos de la muerte"/>
+                            <field name="description" placeholder="motivos de la muerte"/>
 
                             <field name="temperature"/>
                         </group>

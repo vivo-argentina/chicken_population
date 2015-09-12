@@ -1,0 +1,6 @@
+"id","name","model_id:id","group_id:id","perm_read","perm_write","perm_create","perm_unlink"
+"access_chicken_population","chicken.population","model_chicken_population","base.group_user",1,1,1,1
+"access_chicken_population_event","chicken.population.event","model_chicken_population_event","base.group_user",1,1,1,1
+"access_chicken_population_event_wizard","chicken.population.event.wizard","model_chicken_population_event_wizard","base.group_user",1,1,1,0
+"access_hegg_clasification","hegg.clasification","model_hegg_clasification","base.group_user",1,1,1,1
+"access_hegg_clasification_lines","hegg.clasification.lines","model_hegg_clasification_lines","base.group_user",1,1,1,1
