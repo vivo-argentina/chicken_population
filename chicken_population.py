@@ -35,6 +35,7 @@ AVAILABLE_EVENTS = [
         ('chicken_disease','Enfermedad'),  
         ('chicken_dead','Muerte'),   
         ('temperature','Temperatura'),   
+        ('production','Postura'),   
 
     ]
 UNCLASSIFIED_HEGG_ID=41
@@ -73,9 +74,13 @@ class chicken_population_event(osv.osv):
         'qty': fields.float('Quantity'),
         'total_qty': fields.float('Total Quantity'),
         'percent': fields.float('Percent'),
+        'population_qty' : fields.integer('Population qty'),
 
         'active': fields.boolean('Active', help="If the active field is set to False."),
-        'type': fields.selection(AVAILABLE_EVENTS, 'Event Type')   
+        'type': fields.selection(AVAILABLE_EVENTS, 'Event Type') ,
+        'population': fields.many2many('chicken.population', 'chicken_population_event_item',
+                                       'event_id','population_id',  'Events')   
+ 
         }
 
     _defaults = {
@@ -111,7 +116,7 @@ class chicken_population_event_wizard(osv.osv_memory):
         }
 
         def do_set_event(self, cr, uid,ids,context=None):
-            event_data=self.read(cr, uid, ids[0], ['population_id','datetime','new_egg','broken_egg','chicken_dead','temperature'])
+            event_data=self.read(cr, uid, ids[0], ['population_id','datetime','new_egg','broken_egg','chicken_dead','temperature','description'])
 
             chicken_population=self.pool.get('chicken.population')
             chicken_population_event=self.pool.get('chicken.population.event')
@@ -122,48 +127,61 @@ class chicken_population_event_wizard(osv.osv_memory):
 
             chicken_population_data={}
             events=[]
-            #si huevos rotos y nuevos huevos  creo el evento
-            # y modifico el stock de UNCLASSIFIED_HEGG_ID . deberia realizarlo con la funcion de ajuste de stock
-            if(event_data['broken_egg'] and event_data['new_egg']):
-                total_eggs=event_data['broken_egg'] + event_data['new_egg']
-                event={'name':'Huevos Rotos','qty':event_data['broken_egg'],
-                        'percent':event_data['broken_egg']*100/total_eggs,
-                        'datetime':event_data['datetime'],'type':'broken_egg'}
-                #event_id=chicken_population_event.create(cr,uid,event,context=None)
-                events.append((0,0,event))
-            
-                event={'name':'Huevos Juntados','qty':event_data['new_egg'],
-                        'percent':event_data['new_egg']*100/total_eggs,
-                        'datetime':event_data['datetime'],'type':'new_egg'}
-                #event_id=chicken_population_event.create(cr,uid,event,context=None)
-                events.append((0,0,event))
-                
-                qty_available=unclassified_hegg['qty_available']+ event_data['new_egg']
-                nqty=self.change_product_qty( cr, uid, qty_available, context)
-                _logger.info("filoquin ----- qty_available  : %r", qty_available)
-
-                #vals={}
-                #vals['qty_available']=unclassified_hegg['qty_available']+ event_data['new_egg'];
-                #product_template.write(cr, uid, [UNCLASSIFIED_HEGG_ID], vals, context=context)
+            actual_population=population['actual_population']
+            total_eggs=event_data['broken_egg'] + event_data['new_egg']
 
             if(event_data['chicken_dead']):
                 actual_population=population['actual_population']-event_data['chicken_dead']
 
                 event={'name':'Muerte','qty':event_data['chicken_dead'],
                         'percent':event_data['chicken_dead']*100/population['start_population'],
-                        'datetime':event_data['datetime'],'type':'chicken_dead'}
+                        'datetime':event_data['datetime'],'type':'chicken_dead','population_qty':actual_population,
+                        'description':event_data['description']}
                 #event_id=chicken_population_event.create(cr,uid,event,context=None)
                 events.append((0,0,event))
                 chicken_population_data['actual_population']=actual_population
   
+
+            # Si huevos rotos agrego un evento y visualizo el procentual de rotura
+            if(event_data['broken_egg']):
+                event={'name':'Huevos Rotos','qty':event_data['broken_egg'],
+                        'percent':event_data['broken_egg']*100/total_eggs,
+                        'datetime':event_data['datetime'],'type':'broken_egg','population_qty':actual_population}
+                #event_id=chicken_population_event.create(cr,uid,event,context=None)
+                events.append((0,0,event))
+
+            # Si  nuevos huevos  creo el evento new  hegg
+            # y modifico el stock de UNCLASSIFIED_HEGG_ID
+            # to-do: Deberia realizarlo con la funcion de ajuste de stock            
+
+            if(event_data['new_egg']):
+                event={'name':'Nuevos Huevos','qty':event_data['new_egg'],
+                        'percent':event_data['new_egg']*100/actual_population,
+                        'datetime':event_data['datetime'],'type':'new_egg','population_qty':actual_population}
+                #event_id=chicken_population_event.create(cr,uid,event,context=None)
+                events.append((0,0,event))
+                
+            if event_data['new_egg'] or event_data['broken_egg']:
+                event={'name':'Postura','qty':total_eggs,
+                        'percent':total_eggs*100/actual_population,
+                        'datetime':event_data['datetime'],'type':'production','population_qty':actual_population}
+                #event_id=chicken_population_event.create(cr,uid,event,context=None)
+                events.append((0,0,event))
+
+
+                qty_available=unclassified_hegg['qty_available']+ event_data['new_egg']
+                nqty=self.change_product_qty( cr, uid, qty_available, context)
+
+                #vals={}
+                #vals['qty_available']=unclassified_hegg['qty_available']+ event_data['new_egg'];
+                #product_template.write(cr, uid, [UNCLASSIFIED_HEGG_ID], vals, context=context)
             if(event_data['temperature']):
                 event={'name':'Temperatura','qty':event_data['temperature'],
-                        'datetime':event_data['datetime'],'type':'temperature'}
+                        'datetime':event_data['datetime'],'type':'temperature','population_qty':actual_population}
                 #event_id=chicken_population_event.create(cr,uid,event,context=None)
                 events.append((0,0,event))
 
             
-            _logger.info("filoquin ----- events  : %r", events)
 
             chicken_population_data['event_item']=events
             chicken_population.write(cr, uid, event_data['population_id'][0], chicken_population_data, context=context)
