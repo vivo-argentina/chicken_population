@@ -24,17 +24,23 @@ from openerp.osv import fields, osv
 from openerp import tools
 from openerp.tools.translate import _
 import datetime
+from datetime import date , datetime
+from dateutil.relativedelta import relativedelta
+
 
 import logging
 _logger = logging.getLogger(__name__)
 
 AVAILABLE_EVENTS = [
         ('broken_egg','Huevos rotos'),
+        ('food_charge','Carga de alimientos'),
         ('new_egg','Huevos recogidos'),
         ('other','Otros'),    
         ('chicken_disease','Enfermedad'),  
         ('chicken_dead','Muerte'),   
         ('temperature','Temperatura'),   
+        ('temperature_max','Temperatura Maxima'),   
+        ('temperature_min','Temperatura Minima'),   
         ('production','Postura'),   
 
     ]
@@ -44,6 +50,26 @@ class chicken_population(osv.osv):
     _name = "chicken.population"
     _inherit = ['mail.thread']
 
+    def _fnct_actual_food(self, cr, uid, ids, field_name, args, context=None):
+
+        day_food=0.013
+
+        if context is None:
+            context = {}
+        res = {}
+        for chicken_population in self.browse(cr, uid, ids, context=context):
+            if chicken_population.time_last_food_charge :
+
+                start=datetime.strptime(chicken_population.time_last_food_charge,'%Y-%m-%d')
+                end=datetime.today()
+                diff =   end - start
+                used = chicken_population.last_food_charge_qty -(diff.days * day_food * chicken_population.actual_population)
+                
+                res[chicken_population.id] = used
+        return res
+
+
+
     _columns = {
         'name': fields.char('Name', required=True, translate=True),
         'description': fields.text('Description'),
@@ -52,6 +78,11 @@ class chicken_population(osv.osv):
         'active': fields.boolean('Active', help="If the active field is set to False."),
         'start_population': fields.integer('Initial Population Quantity'),
         'actual_population': fields.integer('Population Quantity',track_visibility='onchange'),
+        'time_last_food_charge': fields.date('Last Food charge time'),
+        'last_food_charge_qty': fields.float('Last Food charge Kg'),
+        'actual_food':  fields.function(_fnct_actual_food, string='Actual Food'),
+        'location_id': fields.many2one('stock.location', 'Food Location', required=True, 
+                        domain="[('usage', '=', 'internal')]"),
 
         #'events': fields.many2many('chicken.population.event'),
         'event_item': fields.many2many('chicken.population.event', 'chicken_population_event_item',
@@ -103,12 +134,19 @@ class chicken_population_event_wizard(osv.osv_memory):
                     'population_id': fields.many2one('chicken.population','Population',required=True,),
                     'datetime': fields.datetime('event date','Date'),
                     'new_egg' : fields.integer('New eggs'),
+                    'food' : fields.integer('Food charge'),
                     'broken_egg' : fields.integer('Broken eggs'),
                     'chicken_dead' : fields.integer('Chicken dead'),
                     'description': fields.text('Description'),
-                    'temperature' : fields.float('Temperature'),
+                    'temperature_max' : fields.float('Temperature Max'),
+                    'temperature_min' : fields.float('Temperature Min'),
                     'location_id': fields.many2one('stock.location', 'Location', required=True, 
-                        domain="[('usage', '=', 'internal')]")
+                        domain="[('usage', '=', 'internal')]"),
+
+                    'food_product': fields.many2one('product.template','product'),
+                    'food_qty': fields.float('Quantity in kg'),
+                    'food_stock_to_zero': fields.boolean('stock to zero'),
+
 
                     }
         _defaults= {
@@ -116,7 +154,8 @@ class chicken_population_event_wizard(osv.osv_memory):
         }
 
         def do_set_event(self, cr, uid,ids,context=None):
-            event_data=self.read(cr, uid, ids[0], ['population_id','datetime','new_egg','broken_egg','chicken_dead','temperature','description'])
+            event_data=self.read(cr, uid, ids[0], ['population_id','datetime','new_egg','broken_egg',
+                'chicken_dead','temperature_max','temperature_min','description','food_product','food_qty','food_stock_to_zero'])
 
             chicken_population=self.pool.get('chicken.population')
             chicken_population_event=self.pool.get('chicken.population.event')
@@ -175,13 +214,47 @@ class chicken_population_event_wizard(osv.osv_memory):
                 #vals={}
                 #vals['qty_available']=unclassified_hegg['qty_available']+ event_data['new_egg'];
                 #product_template.write(cr, uid, [UNCLASSIFIED_HEGG_ID], vals, context=context)
-            if(event_data['temperature']):
-                event={'name':'Temperatura','qty':event_data['temperature'],
-                        'datetime':event_data['datetime'],'type':'temperature','population_qty':actual_population}
+            if(event_data['temperature_max']):
+                event={'name':'Temperatura Maxima','qty':event_data['temperature_max'],
+                        'datetime':event_data['datetime'],'type':'temperature_max','population_qty':actual_population}
                 #event_id=chicken_population_event.create(cr,uid,event,context=None)
                 events.append((0,0,event))
 
+            if(event_data['temperature_min']):
+                event={'name':'Temperatura Minima','qty':event_data['temperature_min'],
+                        'datetime':event_data['datetime'],'type':'temperature_min','population_qty':actual_population}
+                #event_id=chicken_population_event.create(cr,uid,event,context=None)
+                events.append((0,0,event))
             
+            if event_data['food_product'] :
+                if event_data['food_stock_to_zero'] :
+                    last_food_charge_qty=event_data['food_qty']
+                else :
+                    last_food_charge_qty=population['actual_food']+event_data['food_qty']
+
+                product_obj=self.pool.get('product.template')
+                hegg_clasification=self.pool.get('hegg.clasification')
+                
+                food_product=product_obj.browse(cr, uid,event_data['food_product'][0])
+
+                hegg_clasification.change_product_qty( cr, uid, last_food_charge_qty,food_product,population['location_id']['id'])
+
+
+                for component in food_product['components_id']:
+                    qty=hegg_clasification._convert_qty( cr, uid, component['qty']*event_data['food_qty'],component['uom_id'],component['product'])
+                    component_qty=component['product']['qty_available']-qty[0]
+                    hegg_clasification.change_product_qty( cr, uid, component_qty,component['product'],12)
+
+
+                event={'name':'Carga de alimentos','qty':event_data['food_qty'],
+                        'datetime':event_data['datetime'],'type':'food_charge'}
+                events.append((0,0,event))
+                
+                #event_id=chicken_population_event.create(cr,uid,event,context=None)
+                chicken_population_data['last_food_charge_qty']=last_food_charge_qty
+                chicken_population_data['time_last_food_charge']=event_data['datetime']
+
+
 
             chicken_population_data['event_item']=events
             chicken_population.write(cr, uid, event_data['population_id'][0], chicken_population_data, context=context)
@@ -273,11 +346,11 @@ class hegg_clasification(osv.osv):
 
             line=lines_obj.browse(cr, uid, item, context=None)
             new_qty=line['product']['qty_available']+line['qty']
-            self.change_product_qty( cr, uid, new_qty,line['product'])
+            self.change_product_qty( cr, uid, new_qty,line['product'],12)
             for component in line['product']['components_id']:
                 qty=self._convert_qty( cr, uid, component['qty']*line['qty'],component['uom_id'],component['product'])
                 component_qty=component['product']['qty_available']-qty[0]
-                self.change_product_qty( cr, uid, component_qty,component['product'])
+                self.change_product_qty( cr, uid, component_qty,component['product'],12)
 
         vals={}
         vals['state']='done'
@@ -302,7 +375,7 @@ class hegg_clasification(osv.osv):
             unit = product['uom_id']
         return qty, unit
             
-    def change_product_qty(self, cr, uid, qty,product,context=None):
+    def change_product_qty(self, cr, uid, qty,product,location_id,context=None):
         product_product=self.pool.get('product.product')
         product_ids=product_product.search(cr, uid, [('product_tmpl_id', '=', product['id'])], context=None)
 
@@ -316,7 +389,7 @@ class hegg_clasification(osv.osv):
             'name': _('cls: x') ,
             'filter': 'product',
             'product_id': product['id'],
-            'location_id': 12}, context=context)
+            'location_id': location_id}, context=context)
 
         #product = data.product_id.with_context(location=1, lot_id= 1)
         #th_qty = product.qty_available
@@ -324,7 +397,8 @@ class hegg_clasification(osv.osv):
         line_data = {
             'inventory_id': inventory_id,
             'product_qty': qty,
-            'location_id': 12,
+            'location_id': location_id,               
+
             'product_id': product_ids[0],
             'product_uom_id': product['uom_id']['id'],
             'theoretical_qty': 0

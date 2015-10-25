@@ -12,6 +12,7 @@
                     <field name="startdate"/>
                     <field name="enddate"/>
                     <field name="active"/>
+         
                 </tree>
             </field>
         </record>
@@ -34,12 +35,15 @@
                         <notebook>
                             <page string="Information">
                                 <group colspan="4">
-                                    <group>
                                         <field name="startdate"/>
                                         <field name="enddate"/>
                                         <field name="start_population"/>
                                         <field name="actual_population"/>
-                                    </group>
+                                        <field name="time_last_food_charge"/>
+                                        <field name="last_food_charge_qty"/>
+                                        <field name="actual_food"/>
+                                        <field name="location_id"/>
+
                                     <group>
                                         <field name="active"/>
                                     </group>
@@ -70,15 +74,17 @@
             <field name="model">chicken.population</field>
             <field name="arch" type="xml">
                 <kanban>
-                    <field name="name"/>00
-                    
+                    <field name="name"/>
+                    <field name="last_food_charge_qty"/>
+                    <field name="actual_food"/>
+
                     
                     <field name="startdate"/>
                     <templates>
                         <t t-name="kanban-box">
                             <div class="oe_kanban_vignette oe_semantic_html_override">
-                                <a type="open">
-                                    <field name="name"/></a>
+                                <h2><a type="open">
+                                    <field name="name"/></a></h2>
                                 <div class="oe_kanban_details">
                                     <h4>
                                         <a type="open">[
@@ -91,6 +97,11 @@
                                             
                                             <field name="actual_population"/></a>
                                     </h4>
+                                               <div class="oe_center">
+                        <field name="actual_food" widget="gauge" style="width:200px; height: 120px; cursor: pointer;"
+                            options="{'max_field': 'last_food_charge_qty'}">Alimento</field>
+                    </div>
+
                                     <div name="tags"/>
                                 </div>
                             </div>
@@ -185,7 +196,12 @@
                             <field name="broken_egg"/>
                             <field name="chicken_dead"/>
                             <field attrs="{'invisible':[('chicken_dead', '==', 0)]}" name="description" placeholder="motivos de la muerte"/>
-                            <field name="temperature"/>
+                            <field name="temperature_max"/>
+                            <field name="temperature_min"/>
+                            <field name="food_product" domain="[('uom_id','=',3)]"/>
+                            <field name="food_qty" attrs="{'invisible':[('food_product', '==', None)]}" />
+                            <field name="food_stock_to_zero" attrs="{'invisible':[('food_product', '==', [6,0,[]])]}" />
+
                         </group>
                         <footer>
                             <button class="oe_highlight" name="do_set_event" string="Set Events" type="object"/>
