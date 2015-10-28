@@ -104,8 +104,8 @@ class chicken_population_event(osv.osv):
         'datetime': fields.datetime('event date'),
         'qty': fields.float('Quantity'),
         'total_qty': fields.float('Total Quantity'),
-        'percent': fields.float('Percent'),
-        'population_qty' : fields.integer('Population qty'),
+        'percent': fields.float('Percent',group_operator="avg"),
+        'population_qty' : fields.integer('Population qty',group_operator="avg"),
 
         'active': fields.boolean('Active', help="If the active field is set to False."),
         'type': fields.selection(AVAILABLE_EVENTS, 'Event Type') ,

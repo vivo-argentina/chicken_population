@@ -90,8 +90,10 @@
                                         <a type="open">[
                                             
                                             
+                                            
                                             <field name="startdate"/>
                                             ]
+                                            
                                             
                                             
                                             
@@ -134,9 +136,6 @@
                 </tree>
             </field>
         </record>
-        
-
-
         <record id="chicken_population_event_action" model="ir.actions.act_window">
             <field name="name">Events</field>
             <field name="type">ir.actions.act_window</field>
@@ -152,21 +151,26 @@
             <field name="arch" type="xml">
                 <graph string="Events" type="pivot">
                     <field interval="day" name="datetime" type="row"/>
-                    <field name="population" type="measure"/>                   
+                    <field name="qty" type="measure"/>
                     <field name="percent" type="measure"/>
+                    <field name="population_qty" type="measure"/>
                 </graph>
             </field>
         </record>
         <record id="action_chicken_population_event_graph" model="ir.actions.act_window">
-            <field name="name">Events</field>
+            <field name="name">Postura</field>
             <field name="res_model">chicken.population.event</field>
             <field name="view_type">form</field>
             <field name="view_mode">graph</field>
             <field name="view_id" ref="chicken_population_event_graph"/>
             <field name="context">{'type':'production'}</field>
-        </record>
+            <field name="domain">[('type','=','production')]</field>
 
+        </record>
         <menuitem action="action_chicken_population_event_graph" id="menu_action_chicken_population_event_graph" parent="base.menu_population" sequence="3"/>
+
+
+
         <record id="chicken_population_event_filter" model="ir.ui.view">
             <field name="name">chicken.population.event.select</field>
             <field name="model">chicken.population.event</field>
