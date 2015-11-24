@@ -44,7 +44,6 @@ class product_template_components(osv.osv):
     _columns = {
         'product': fields.many2one('product.template','product'),
         'qty': fields.float('Quantity'),
-        'uom_id': fields.many2one('product.uom', 'Unit of Measure'),
 
         }
 

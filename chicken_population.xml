@@ -170,6 +170,17 @@
         <menuitem action="action_chicken_population_event_graph" id="menu_action_chicken_population_event_graph" parent="base.menu_population" sequence="3"/>
 
 
+        <record id="action_chicken_population_event_graph2" model="ir.actions.act_window">
+            <field name="name">Eventos</field>
+            <field name="res_model">chicken.population.event</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">graph</field>
+            <field name="view_id" ref="chicken_population_event_graph"/>
+            <field name="context">{'type':'production'}</field>
+            <field name="domain"></field>
+
+        </record>
+        <menuitem action="action_chicken_population_event_graph2" id="menu_action_chicken_population_event_graph2" parent="base.menu_population" sequence="4"/>
 
         <record id="chicken_population_event_filter" model="ir.ui.view">
             <field name="name">chicken.population.event.select</field>

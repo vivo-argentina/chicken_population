@@ -138,7 +138,7 @@ msgstr "Tipo de evento"
 #: model:ir.actions.act_window,name:granpat_problaciones.action_chicken_population_event_graph
 #: model:ir.ui.menu,name:granpat_problaciones.menu_action_chicken_population_event_graph
 msgid "Events"
-msgstr "Eventos"
+msgstr "Postura"
 
 #. module: granpat_problaciones
 #: field:chicken.population,message_follower_ids:0

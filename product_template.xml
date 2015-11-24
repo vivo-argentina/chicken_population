@@ -10,9 +10,8 @@
                     <page string="components">
                         <field name="components_id" widget="one2many">
                             <tree editable="top">
-                                <field name="qty"/>
+                                <field name="qty" string='%' max='100' min='0'/>
                                 <field name="product"/>
-                                <field name="uom_id"/>
                             </tree>
                         </field>
                     </page>

@@ -228,8 +228,10 @@ class chicken_population_event_wizard(osv.osv_memory):
             
             if event_data['food_product'] :
                 if event_data['food_stock_to_zero'] :
+                    #seteo la nueva cantidad
                     last_food_charge_qty=event_data['food_qty']
                 else :
+                    #Agrego el aliment
                     last_food_charge_qty=population['actual_food']+event_data['food_qty']
 
                 product_obj=self.pool.get('product.template')
@@ -240,9 +242,14 @@ class chicken_population_event_wizard(osv.osv_memory):
                 hegg_clasification.change_product_qty( cr, uid, last_food_charge_qty,food_product,population['location_id']['id'])
 
 
+
+
                 for component in food_product['components_id']:
+
                     qty=hegg_clasification._convert_qty( cr, uid, component['qty']*event_data['food_qty'],component['uom_id'],component['product'])
+                    
                     component_qty=component['product']['qty_available']-qty[0]
+                    
                     hegg_clasification.change_product_qty( cr, uid, component_qty,component['product'],12)
 
 
@@ -343,12 +350,19 @@ class hegg_clasification(osv.osv):
         components_obj=self.pool.get('product.template.components')
 
         for item in clasification['clasification_items']:
-
+            #Recorro los items que clasifico
             line=lines_obj.browse(cr, uid, item, context=None)
+            #aumento la cantidad de productos selecionados 
             new_qty=line['product']['qty_available']+line['qty']
             self.change_product_qty( cr, uid, new_qty,line['product'],12)
+
+            #redusco la cantidad de los otros
             for component in line['product']['components_id']:
-                qty=self._convert_qty( cr, uid, component['qty']*line['qty'],component['uom_id'],component['product'])
+                # 1 Obtengo el qty del procentual de qty en unidad de referencia
+                # 2 Transformo ese qty en la unidad de el componente
+                percent_in_qty=line['qty'] * (component['qty'] / 100) 
+                qty=_convert_qty(cr, uid,percent_in_qty,line['product']['uom_id'],component['product'])
+                # 3 reducco esto de el inventario del producto                
                 component_qty=component['product']['qty_available']-qty[0]
                 self.change_product_qty( cr, uid, component_qty,component['product'],12)
 
@@ -357,6 +371,29 @@ class hegg_clasification(osv.osv):
         #vals['total_eggs']=5 
         self.write(cr, uid, ids[0], vals, context=context)
 
+    def _convert_qty_from_percent(self, cr, uid, qty, unit, product,percent, is_from_unit=True):
+        import operator
+
+        operator_function = is_from_unit and operator.truediv or operator.mul
+        if unit != product['uom_id']:
+            if unit['uom_type'] != 'reference':
+                qty = operator_function(qty, unit['factor'])
+                unit = unit['category_id']['reference_uom_ids'][0]
+
+            if product['uom_id']['uom_type'] != 'bigger':
+                qty = qty * product['uom_id']['factor'] 
+
+            if product['uom_id']['uom_type'] != 'smaller':
+                qty = qty / product['uom_id']['factor_inv'] 
+                
+
+            unit = product['uom_id']
+        return qty, unit
+
+
+
+
+        
     def _convert_qty(self, cr, uid, qty, unit, product, is_from_unit=True):
         import operator
         operator_function = is_from_unit and operator.truediv or operator.mul
@@ -374,6 +411,7 @@ class hegg_clasification(osv.osv):
 
             unit = product['uom_id']
         return qty, unit
+
             
     def change_product_qty(self, cr, uid, qty,product,location_id,context=None):
         product_product=self.pool.get('product.product')
